@@ -7,9 +7,8 @@ Posee(fk_idProducto, fk_caracteristica, descripcion, cantidad);
 Comprador(pk_email, dni, nombre, telefono, fk_idDireccion);
 Direccion(PK_IdDireccion, puerta, pais, poblacion, calle, Cpostal);
 Comenta(fk_producto, fk_email, comentario, puntuacion);
-venta(pk_idVenta, fechaCompra, precioTotal, fk_email, fk_numTarjeta);
+venta(pk_idVenta, fechaCompra, precioTotal, fk_email, fk_numTarjeta ,fechaEnvio, fechaEstimada, fechaEntrega, estado, fk_direccion, fk_idventa);
 conte(fk_producto, fk_venta, precioProducto, cantidad, descripcion);
-pedido(pk_IdPedido, fechaEnvio, fechaEstimada, fechaEntrega, estado, fk_direccion, fk_idventa);
 tarjeta(id_numTargeta, nomPropietario, FechaCaducidad, csv);
 
 

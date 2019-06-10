@@ -50,3 +50,53 @@ alter table Conte add constraint fk_idVenta_conte foreign key (fk_idVenta) refer
 alter table modificaStock add constraint fk_idProducto_modifica foreign key (fk_idProducto) references Producto(pk_idProducto) on delete cascade on update cascade;
 
 alter table Venta add constraint estado check (estado in('preparando', 'en camino', 'recibido', 'cancelado', 'perdido'));
+
+create view productes as Select nombreProducto, (precio - (precio*oferta)/100) as precioActual from producto;
+
+DELIMITER $$
+CREATE TRIGGER `actualitzaPreu_Before_Insert` BEFORE INSERT ON `conte` FOR EACH ROW BEGIN
+declare num int;
+select stock into num from producto where pk_idProducto=new.fk_idProducto;
+if(new.cantidad<=num) then
+update venta set precioTotal=precioTotal+(new.precioProducto*new.cantidad) where pk_idVenta=new.fk_idVenta;
+update producto set stock= stock-new.cantidad where pk_idProducto=new.fk_idProducto;
+else 
+SIGNAL SQLSTATE '45000'
+ SET MESSAGE_TEXT = 'Cantidad no disponible!';
+end if;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `actualitzaPreu_Before_Delete` BEFORE Delete ON `conte` FOR EACH ROW BEGIN
+update venta set precioTotal=precioTotal-(old.precioProducto*old.cantidad) where pk_idVenta=old.fk_idVenta;
+update producto set stock= stock+old.cantidad where pk_idProducto=old.fk_idProducto;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `actualitzaPreu_Before_Update` BEFORE update ON `conte` FOR EACH ROW BEGIN
+declare num int;
+select stock into num from producto where pk_idProducto=new.fk_idProducto;
+if(new.cantidad<=num) then
+update venta set precioTotal=precioTotal-(old.precioProducto*old.cantidad) where pk_idVenta=old.fk_idVenta;
+update producto set stock= stock+old.cantidad where pk_idProducto=old.fk_idProducto;
+update venta set precioTotal=precioTotal+(new.precioProducto*new.cantidad) where pk_idVenta=new.fk_idVenta;
+update producto set stock= stock-new.cantidad where pk_idProducto=new.fk_idProducto;
+else 
+SIGNAL SQLSTATE '45000'
+ SET MESSAGE_TEXT = 'Cantidad no disponible!';
+end if;
+END
+$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER `comprovaData_Before_insert` BEFORE insert ON `Venta` FOR EACH ROW BEGIN
+if(new.fechaEstimada
+SIGNAL SQLSTATE '45000'
+ SET MESSAGE_TEXT = 'Fecha no valida!';
+end if;
+END
+$$
+DELIMITER ;

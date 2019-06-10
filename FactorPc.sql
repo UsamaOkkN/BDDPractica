@@ -22,6 +22,8 @@ create table Venta(pk_idVenta int auto_increment, fechaCompra datetime not null 
 
 create table Conte (fk_idProducto int, fk_idVenta int , precioProducto double not null default 0, cantidad int not null default 1, descripcion varchar(500));
 
+create table modificaStock( fk_idProducto int not null, fecha datetime not null default current_timestamp(), cantidad int not null, comentario varchar(500), primary key(fk_idProducto, fecha, cantidad, comentario));
+
 
 alter table Caracteristica add constraint fk_unidad_caracteristica foreign key (fk_unidad) references Unidad(pk_unidad) on update cascade;
 
@@ -44,3 +46,7 @@ alter table Venta add constraint fk_idDireccion_venta foreign key (fk_idDireccio
 alter table Conte add constraint fk_idProducto_conte foreign key (fk_idProducto) references Producto(pk_idProducto) on delete cascade on update cascade;
 
 alter table Conte add constraint fk_idVenta_conte foreign key (fk_idVenta) references Venta(pk_idVenta) on delete cascade on update cascade;
+
+alter table modificaStock add constraint fk_idProducto_modifica foreign key (fk_idProducto) references Producto(pk_idProducto) on delete cascade on update cascade;
+
+alter table Venta add constraint estado check (estado in('preparando', 'en camino', 'recibido', 'cancelado', 'perdido'));

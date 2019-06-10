@@ -93,7 +93,7 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER `comprovaData_Before_insert` BEFORE insert ON `Venta` FOR EACH ROW BEGIN
-if(new.fechaEstimada
+if(new.fechaEstimada<=new.fechaCompra or new.fechaEnvio<=new.fechaCompra or new.fechaEntrega<=new.fechaCompra or new.fechaEnvio>new.fechaEntrega) then
 SIGNAL SQLSTATE '45000'
  SET MESSAGE_TEXT = 'Fecha no valida!';
 end if;

@@ -155,4 +155,4 @@ delimiter ;
 create user 'admin'@'%' identified by '1234';
 grant all on FactorPc.* to 'admin'@'%';
 
-insert into unidad values ("MB"),("GB"),("TB"),("MHz"),("GHz"),("pulgadas"),("MPx"),("V"),("W"),("rpm");
+/*drop database factorPC

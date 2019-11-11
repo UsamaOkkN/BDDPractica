@@ -21,6 +21,8 @@ create table Direccion (pk_idDireccion int auto_increment, puerta int not null, 
 
 create table Venta(pk_idVenta int auto_increment, fechaCompra datetime not null default current_timestamp(), precioTotal double not null default 0, fk_email varchar(200) not null, fechaEnvio date not null, fechaEstimada date not null, fechaEntrega date not null, estado varchar(20) not null, fk_idDireccion int not null, tarjeta char(16) not null, primary key(pk_idVenta));
 
+create table Carrito(fk_idVenta int, fk_idProducto int, cantidad int not null default 1, primary key(fk_idVenta, fk_idProducto));
+
 create table Conte (fk_idProducto int, fk_idVenta int , precioProducto double not null default 0, cantidad int not null default 1, descripcion varchar(500), primary key(fk_idProducto, fk_idVenta));
 
 create table modificaStock( fk_idProducto int not null, fecha datetime not null default current_timestamp(), cantidad int not null, comentario varchar(500), primary key(fk_idProducto, fecha, cantidad, comentario));

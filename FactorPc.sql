@@ -62,7 +62,7 @@ update venta set precioTotal=precioTotal+(new.precioProducto*new.cantidad) where
 update producto set stock= stock-new.cantidad where pk_idProducto=new.fk_idProducto;
 else 
 SIGNAL SQLSTATE '45000'
- SET MESSAGE_TEXT = 'Cantidad no disponible!';
+ SET MESSAGE_TEXT = 'La Cantidad no está disponible!';
 end if;
 END
 $$
